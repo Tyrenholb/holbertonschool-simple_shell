@@ -1,0 +1,26 @@
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int main(void)
+{
+	char *line = NULL;
+	size_t size = 0;
+	ssize_t nread;
+
+	while (1)
+	{
+		write(STDOUT_FILENO, "$ ", 2);
+
+		nread = getline(&line, &size, stdin);
+
+		if (nread == -1)
+			break;
+
+		printf("%s", line);
+	}
+
+	free(line);
+	return (0);
+}
