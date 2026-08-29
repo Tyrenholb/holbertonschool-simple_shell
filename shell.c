@@ -34,7 +34,9 @@ ssize_t read_command(char **line, size_t *size)
 	characters = getline(line, size, stdin);
 
 	if (characters > 0 && (*line)[characters - 1] == '\n')
+	{
 		(*line)[characters - 1] = '\0';
+	}
 		return (characters);
 }
 

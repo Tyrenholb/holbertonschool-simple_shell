@@ -2,7 +2,7 @@
 #include <string.h>
 
 int main() {
-  char myStr[] = "test the string here";
+  char myStr[] = "/bin/ls /bin/ls /bin/ls /bin/ls";
   char *myPtr = strtok(myStr, " ");
   while (myPtr != NULL) {
     printf("%s\n", myPtr);
