@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-extern char **environ;
+#include "shell.h"
 /**
  * main - runs a basic UNIX command-line interpreter
  *
