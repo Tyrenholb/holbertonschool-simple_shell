@@ -14,7 +14,7 @@ int main(void)
 	pid_t child_pid;
 	int status;
 	int counter = 0;
-	char *argv[] = {"/bin/ls","-l","/tmp",NULL};
+	char *argv[] = {"/bin/ls", "-l", "/tmp", NULL};
 
 	while (counter < 5)
 	{
