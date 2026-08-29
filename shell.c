@@ -3,14 +3,14 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-
+extern char **environ;
 /**
- * basic shell
+ * main - runs a basic UNIX command-line interpreter
  *
- * Return: Always 0
+ * Return: 0 on success, 1 on failure
  */
 
-int main()
+int main(void)
 {
 	char *line = NULL;
 	char *argv[2];
@@ -46,7 +46,7 @@ while (1)
 		argv[0] = line;
 		argv[1] = NULL;
 
-		execve(argv[0], argv, NULL);
+		execve(argv[0], argv, environ);
 		perror("execve");
 		free(line);
 		_exit(1);
