@@ -31,15 +31,11 @@ ssize_t read_command(char **line, size_t *size)
 		printf("shell$ ");
 		fflush(stdout);
 	}
-
 	characters = getline(line, size, stdin);
 
-	if (characters == -1)
-		return (-1);
-
-	(*line)[characters - 1] = '\0';
-
-	return (characters);
+	if (characters > 0 && (*line)[characters - 1] == '\n')
+		(*line)[characters - 1] = '\0';
+		return (characters);
 }
 
 /**
@@ -59,14 +55,15 @@ int main(void)
 	while (1)
 	{
 		characters = read_command(&line, &size);
-
 		if (characters == -1)
 		{
 			free(line);
 			return (0);
 		}
+		argv[0] = strtok(line, " \t");
 
-		argv[0] = line;
+		if (argv[0] == NULL)
+			continue;
 		argv[1] = NULL;
 
 		child_pid = fork();
