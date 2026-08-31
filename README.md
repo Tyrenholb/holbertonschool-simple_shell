@@ -12,4 +12,13 @@ The first version of the shell established the basic shell loop:
 * Handle end-of-file (Ctrl+D)
 * Display an error when a command cannot be executed
 
+Simple Shell 0.2
+
+The second version of the shell adds support for command lines with arguments.
+
+* Read commands with arguments
+* Split the command line into separate arguments
+* Store the command and arguments in an argv array
+* Pass the argv array to execve()
+
 At this stage, commands had to be entered using their full path, such as /bin/ls.Command arguments, PATH searching and built-in commands were not yet supported.
