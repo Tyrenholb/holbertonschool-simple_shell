@@ -9,5 +9,7 @@
 #include <string.h>
 
 extern char **environ;
-
+void execute_command(char **argv, char *line);
+ssize_t read_command(char **line, size_t *size);
+char **parse_command(char *line);
 #endif
