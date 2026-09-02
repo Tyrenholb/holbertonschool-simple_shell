@@ -8,8 +8,7 @@ int main(void)
 {
 	char *line = NULL;
 	char **argv;
-	int status;
-	pid_t child_pid;
+	char *command_path;
 	ssize_t characters;
 	size_t size = 0;
 
@@ -31,17 +30,15 @@ int main(void)
 			free(argv);
 			continue;
 		}
-		child_pid = fork();
-		if (child_pid == -1)
+
+		command_path = find_command(argv[0]);
+
+		if (command_path != NULL)
 		{
-			perror("fork");
-			free(argv);
-			free(line);
-			return (1);
+			argv[0] = command_path;
+			run_command(argv, line);
+
 		}
-		if (child_pid == 0)
-			execute_command(argv, line);
-		wait(&status);
 		free(argv);
 	}
 	free(line);
