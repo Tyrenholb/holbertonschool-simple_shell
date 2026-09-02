@@ -37,6 +37,7 @@ int main(void)
 		{
 			argv[0] = command_path;
 			run_command(argv, line);
+			free(command_path);
 
 		}
 		free(argv);

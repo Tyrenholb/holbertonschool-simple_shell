@@ -61,6 +61,7 @@ char *find_command(char *command)
 {
 	char **env;
 	char *path;
+    char *command_path;
 	struct stat buffer;
 
 	env = environ;
@@ -80,7 +81,15 @@ char *find_command(char *command)
 		return (NULL);
 
 	if (stat(command, &buffer) == 0)
-		return (command);
+    {
+
+        command_path = malloc(strlen(command) + 1);
+        if (command_path == NULL)
+            return (NULL);
+
+        strcpy(command_path, command);
+        return (command_path);
+    }
 
 	return (search_path(command, path));
 }
