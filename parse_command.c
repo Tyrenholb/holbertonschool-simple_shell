@@ -8,7 +8,7 @@
  */
 
 char **parse_command(char *line)
- {
+{
 	char **argv;
 	char *token;
 	size_t argv_capacity;
@@ -31,4 +31,4 @@ char **parse_command(char *line)
 	argv[argv_count] = NULL;
 
 	return (argv);
- }
+}

@@ -61,8 +61,23 @@ char *find_command(char *command)
 {
 	char **env;
 	char *path;
-    char *command_path;
+	char *command_path;
 	struct stat buffer;
+
+	if (strchr(command, '/') != NULL)
+	{
+		if (stat(command, &buffer) == 0)
+		{
+			command_path = malloc(strlen(command) + 1);
+
+			if (command_path == NULL)
+			return (NULL);
+
+			strcpy(command_path, command);
+			return (command_path);
+		}
+	return (NULL);
+}
 
 	env = environ;
 	path = NULL;
@@ -78,18 +93,9 @@ char *find_command(char *command)
 	}
 
 	if (path == NULL)
-		return (NULL);
+		path = "/bin:/usr/bin";
 
-	if (stat(command, &buffer) == 0)
-    {
 
-        command_path = malloc(strlen(command) + 1);
-        if (command_path == NULL)
-            return (NULL);
-
-        strcpy(command_path, command);
-        return (command_path);
-    }
 
 	return (search_path(command, path));
 }
