@@ -14,3 +14,21 @@ void shell_exit(char *line, char **argv, int last_status)
 	free(line);
 	exit(last_status);
 }
+
+/*
+* print_env - prints the current enviroment
+*
+* Return: Always 0
+*/
+
+int print_env(void)
+{
+	int count = 0;
+
+	while (environ[count] != NULL)
+	{
+		printf("%s\n", environ[count]);
+		count++;
+	}
+	return (0);
+}

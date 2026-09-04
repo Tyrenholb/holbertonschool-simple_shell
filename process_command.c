@@ -14,6 +14,9 @@ int process_command(char **argv, char *line, char *program, int line_number)
 	char *command_path;
 	int command_status;
 
+	if(strcmp(argv[0], "env") == 0)
+		return (print_env());
+
 	command_path = find_command(argv[0]);
 	if (command_path == NULL)
 	{

@@ -19,6 +19,6 @@ char *search_path(char *command, char *path);
 int run_command(char **argv, char *line);
 int process_command(char **argv, char *line, char *program, int line_number);
 void shell_exit(char *line, char **argv, int last_status);
-
+int print_env(void);
 
 #endif
