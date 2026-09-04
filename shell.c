@@ -37,7 +37,10 @@ int main(int ac, char **av)
 			free(argv);
 			continue;
 		}
-
+		if (strcmp(argv[0], "exit") == 0)
+		{
+			shell_exit(line, argv, last_status);
+		}
 		last_status = process_command(argv, line, av[0], line_number);
 		free(argv);
 	}
