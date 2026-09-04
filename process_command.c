@@ -7,11 +7,12 @@
  * @program: shell invocation name
  * @line_number: current input line number
  *
- * Return: 0 on success, or 127 if the command is not found
+ * Return: command exit status, or 127 if the command is not found
  */
 int process_command(char **argv, char *line, char *program, int line_number)
 {
 	char *command_path;
+	int command_status;
 
 	command_path = find_command(argv[0]);
 	if (command_path == NULL)
@@ -22,8 +23,8 @@ int process_command(char **argv, char *line, char *program, int line_number)
 	}
 
 	argv[0] = command_path;
-	run_command(argv, line);
+	command_status = run_command(argv, line);
 	free(command_path);
 
-	return (0);
+	return (command_status);
 }
