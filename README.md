@@ -22,3 +22,15 @@ The second version of the shell adds support for command lines with arguments.
 * Pass the argv array to execve()
 
 At this stage, commands had to be entered using their full path, such as /bin/ls.Command arguments, PATH searching and built-in commands were not yet supported.
+
+Simple Shell 0.3
+The third version added support for locating commands through the PATH environment variable:
+
+* Search each directory listed in PATH
+* Run commands without requiring their full path, such as ls
+* Continue supporting explicit paths such as /bin/ls and ./program
+* Check whether a command exists before creating a child process
+* Avoid calling fork() when a command cannot be found
+* Display a not found error and return status 127 for missing commands
+
+At this stage, external commands can be executed with or without an explicit path. Shell built-in commands are not yet implemented.
