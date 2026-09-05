@@ -1,0 +1,198 @@
+.TH HSH 1 "September 2026" "hsh 1.0" "User Commands"
+.SH NAME
+hsh \- a basic UNIX command-line interpreter
+.SH SYNOPSIS
+.B ./hsh
+.SH DESCRIPTION
+.B hsh
+is a simple command-line interpreter written in C.
+It reads commands from standard input and runs them one line at a time.
+The shell can be used interactively from a terminal or non-interactively
+through a pipe or redirected input.
+.PP
+Each input line is split into tokens at spaces and tabs.
+The first token becomes the command name in
+.BR argv[0] ,
+and the remaining tokens become its arguments.
+Built-in commands are handled directly by the shell.
+For external commands, the shell resolves the command path before calling
+.BR fork (2).
+The child calls
+.BR execve (2),
+while the parent waits for the child to finish.
+.SH INTERACTIVE MODE
+When standard input is connected to a terminal,
+.B hsh
+displays the following prompt:
+.PP
+.RS
+.B shell$
+.RE
+.PP
+Enter one command per line and press Enter to run it.
+Enter
+.B exit
+to close the shell.
+Pressing Ctrl+D at an empty prompt causes the shell to encounter
+end-of-file and exit.
+.SH NON-INTERACTIVE MODE
+When standard input comes from a pipe or redirected file,
+.B hsh
+does not display a prompt.
+It reads and executes each input line until it reaches end-of-file.
+.PP
+A single command can be piped into the shell:
+.PP
+.nf
+$ echo "ls -l /tmp" | ./hsh
+.fi
+.PP
+Multiple commands must be separated by newline characters:
+.PP
+.nf
+$ printf "pwd\\nls -l\\nenv\\n" | ./hsh
+.fi
+.PP
+Commands can also be read from a file:
+.PP
+.nf
+$ ./hsh < commands.txt
+.fi
+.PP
+After reaching end-of-file,
+.B hsh
+returns the status of the last command.
+A command that cannot be found sets the status to 127, but the shell
+continues reading any remaining input lines.
+.SH COMMAND RESOLUTION
+After parsing the input,
+.B hsh
+checks whether the command is a built-in.
+External commands are resolved in one of two ways.
+.SS Direct paths
+If
+.B argv[0]
+contains a slash, the entire command name is treated as a path.
+The shell checks that exact path instead of searching
+.BR PATH .
+.PP
+Examples include:
+.PP
+.nf
+/bin/ls
+\&./program
+directory/program
+.fi
+.PP
+Paths beginning with a slash are absolute.
+Paths such as
+.B ./program
+and
+.B directory/program
+are relative to the current working directory.
+.SS PATH search
+If
+.B argv[0]
+does not contain a slash, the shell finds
+.B PATH
+in the current environment.
+It splits the value into directories, combines each directory with the
+command name, and checks the resulting paths.
+When a matching path is found, its full path is passed to
+.BR execve (2).
+.PP
+If no command is found,
+.B hsh
+prints an error containing its invocation name, the input line number,
+and the command name.
+It sets the command status to 127 and does not call
+.BR fork (2).
+.SH BUILT-IN COMMANDS
+.TP
+.B exit
+Free the current command data and terminate the shell using the status
+of the previous command.
+This version does not accept a numeric exit-status argument.
+.TP
+.B env
+Print each entry in the current environment.
+This command runs directly in the shell without creating a child process.
+.SH SIGNAL HANDLING
+In interactive mode,
+.B hsh
+handles SIGINT, normally produced by pressing Ctrl+C.
+Instead of terminating, the shell prints a newline and displays a fresh
+prompt.
+.PP
+External programs retain their normal signal behaviour.
+For example, pressing Ctrl+C while
+.B /bin/sleep 20
+is running interrupts that command and returns control to the shell.
+.SH EXIT STATUS
+.B hsh
+returns the status of the last command when it reaches end-of-file or
+when the
+.B exit
+built-in is used.
+.TP
+.B 0
+The last command completed successfully.
+.TP
+.B 1
+An allocation, process-management, signal-setup, or execution error occurred.
+.TP
+.B 127
+The command could not be found.
+.TP
+.B 128+n
+The child process was terminated by signal
+.IR n .
+.SH ENVIRONMENT
+.TP
+.B PATH
+A colon-separated list of directories searched when a command name does
+not contain a slash.
+.TP
+.B environ
+The inherited process environment passed to external commands and printed
+by the
+.B env
+built-in.
+.SH EXAMPLES
+Start an interactive session:
+.PP
+.nf
+$ ./hsh
+shell$ ls -l
+shell$ /bin/pwd
+shell$ env
+shell$ exit
+.fi
+.PP
+Run commands non-interactively:
+.PP
+.nf
+$ printf "pwd\\nls -l\\n" | ./hsh
+.fi
+.SH LIMITATIONS
+This version does not interpret quoting, escaping, wildcard expansion,
+variables, pipelines, redirection operators, command separators, or job
+control.
+Only the
+.B exit
+and
+.B env
+built-in commands are implemented.
+.SH SEE ALSO
+.BR sh (1),
+.BR bash (1),
+.BR fork (2),
+.BR execve (2),
+.BR wait (2),
+.BR signal (2),
+.BR getline (3),
+.BR environ (7)
+.SH AUTHORS
+See the
+.B AUTHORS
+file in the project repository.
