@@ -2,6 +2,7 @@
 #define SHELL_H
 
 #include <stdio.h>
+#include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -20,5 +21,6 @@ int run_command(char **argv, char *line);
 int process_command(char **argv, char *line, char *program, int line_number);
 void shell_exit(char *line, char **argv, int last_status);
 int print_env(void);
-
+void handle_sigint(int signal_number);
+int setup_signal(void);
 #endif

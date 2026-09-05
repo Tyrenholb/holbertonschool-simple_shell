@@ -18,6 +18,8 @@ int main(int ac, char **av)
 
 	(void) ac;
 
+	if (setup_signal() == -1)
+		return (1);
 	while (1)
 	{
 		characters = read_command(&line, &size);
@@ -31,7 +33,6 @@ int main(int ac, char **av)
 			free(line);
 			return (1);
 		}
-
 		if (argv[0] == NULL)
 		{
 			free(argv);
@@ -44,7 +45,6 @@ int main(int ac, char **av)
 		last_status = process_command(argv, line, av[0], line_number);
 		free(argv);
 	}
-
 	free(line);
 	return (last_status);
 }
