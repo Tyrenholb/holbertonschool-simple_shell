@@ -1,7 +1,8 @@
 #include "shell.h"
+
 /**
  * shell_exit - free alloacted memory and exits the shell
- * @line input line buffer
+ * @line: input line buffer
  * @argv: parsed command argument array
  * @last_status: status of the last command
  *
@@ -15,7 +16,7 @@ void shell_exit(char *line, char **argv, int last_status)
 	exit(last_status);
 }
 
-/*
+/**
 * print_env - prints the current enviroment
 *
 * Return: Always 0
